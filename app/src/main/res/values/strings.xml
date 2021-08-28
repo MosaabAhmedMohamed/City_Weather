@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">City Weather</string>
+    <string name="retry">retry</string>
+    <string name="opps">Opps</string>
+    <string name="desc">Something went wrong</string>
+    <string name="release_date">"Release Date: "</string>
+    <string name="rating">"Rating: "</string>
+    <string name="overview">"Overview "</string>
+    <string name="download_desc">Please wait! This may take a moment.</string>
+    <string name="full_progress">/100</string>
+    <string name="search_field_placholder">Enter city name...</string>
+    <string name="err_empty_result">city not found</string>
+    <string name="todo">TODO</string>
+</resources>

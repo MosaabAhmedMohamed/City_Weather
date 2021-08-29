@@ -6,6 +6,7 @@ class APIConst {
         const val API_KEY = "af7b1830541171b1ec00a7f31168e3d7"
         var OpenWeatherMapSotrageUrl = "http://openweathermap.org/img/w/"
         const val NUMBER_OF_FORECAST_DAYS = "14"
+        const val CITY_NOT_FOUND = "404"
 
     }
 }

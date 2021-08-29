@@ -1,5 +1,6 @@
 package com.example.core.weather.data.source.remote
 
+import com.example.core.util.data.APIConst.Companion.CITY_NOT_FOUND
 import com.example.core.weather.data.source.remote.client.WeatherApi
 import com.example.core.weather.data.source.remote.model.WeatherRemote
 import com.example.core.weather.domain.entity.param.WeatherRequestPrams
@@ -13,7 +14,10 @@ class WeatherRemoteDataSource @Inject constructor(private val weatherApi: Weathe
     ): Single<List<WeatherRemote>> {
         return weatherApi.getWeather(prams.city, prams.apiKey, prams.numberOfDays, prams.metric)
             .map {
-                it.list
+                if (it.code == CITY_NOT_FOUND) {
+                    emptyList()
+                } else
+                    it.list
             }
     }
 

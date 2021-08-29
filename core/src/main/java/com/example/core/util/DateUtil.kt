@@ -1,19 +1,11 @@
 package com.example.core.util
 
-import android.util.Log
+import java.text.SimpleDateFormat
 import java.util.*
 
-fun getWeekday(unixTime: Long?): String {
+fun getWeekday(date_: Long): String {
 
-
-    Log.d("mapTAG", "mapToUIModel: ${unixTime}")
-
-    val date = Date(unixTime!!)
-    val c = Calendar.getInstance()
-    c.time = date
-
-    /*System.out.println(c[Calendar.DAY_OF_WEEK])*/
-
-    return c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US)
-
+    val sdf = SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.ENGLISH)
+    val dateStr = sdf.format(Date(date_ * 1000))
+    return SimpleDateFormat("EEEE", Locale.getDefault()).format(sdf.parse(dateStr))?:"Unknown"
 }

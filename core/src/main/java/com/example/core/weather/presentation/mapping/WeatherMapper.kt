@@ -15,11 +15,10 @@ fun List<Weather>.mapToUIModel(): MutableList<WeatherUiModel> {
 }
 
 fun Weather.mapToUIModel(): WeatherUiModel {
-    Log.d("mapTAG", "mapToUIModel: ${getWeekday(day)}")
     return WeatherUiModel(
-        getWeekday(day),
-        minDegree.toString(),
-        maxDegree.toString(),
+        day?.let { getWeekday(it) },
+        minDegree?.toInt().toString(),
+        maxDegree?.toInt().toString(),
         rain,
         OpenWeatherMapSotrageUrl.plus(weatherIc.plus(".png"))
     )

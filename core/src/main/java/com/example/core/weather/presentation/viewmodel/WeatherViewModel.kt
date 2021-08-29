@@ -29,12 +29,11 @@ class WeatherViewModel @Inject constructor(
     fun getForecast(city: String) {
         getRemoteWeatherUseCase.getCityWeather(WeatherRequestPrams(city))
             .subscribeOn(schedulerProvider.io())
+            .filter { city.isNotEmpty() }
             .doOnSubscribe {
                 weatherViewStateLDPrivate.postValue(WeatherViewState.Loading)
             }
-            .doOnError { onConnectionException(it) }
-            .onErrorReturn { emptyList() }
-            .flatMap { return@flatMap handleLocalCache(city, it) }
+            .flatMap { return@flatMap addToLocalCache(city, it) }
             .observeOn(schedulerProvider.ui())
             .subscribe({
                 if (it.isNotEmpty())
@@ -42,7 +41,7 @@ class WeatherViewModel @Inject constructor(
                 else
                     weatherViewStateLDPrivate.value = WeatherViewState.emptyState
             }, {
-
+                onConnectionException(it)
             })
             .addTo(compositeDisposable)
     }
@@ -50,22 +49,22 @@ class WeatherViewModel @Inject constructor(
     private fun onConnectionException(it: Throwable) {
         if (it is ConnectException || it is IOException) {
             weatherViewStateLDPrivate.postValue(WeatherViewState.isLoadFromCache)
-        } else {
+        }  else {
             weatherViewStateLDPrivate.postValue(WeatherViewState.onError(it))
         }
     }
 
-    private fun handleLocalCache(
+    private fun addToLocalCache(
         city: String,
         forecast: List<Weather>
     ): Flowable<List<Weather>> {
-        return if (forecast.isEmpty()) {
-            weatherLocalCacheUseCase.getForecast(city).flatMap {
-                Flowable.just(it)
-            }
-        } else {
-            weatherLocalCacheUseCase.cacheForecast(city, forecast)
-            Flowable.just(forecast)
+        weatherLocalCacheUseCase.cacheForecast(city, forecast)
+        return Flowable.just(forecast)
+    }
+
+    private fun getFromLocalCache(city: String): Flowable<List<Weather>>? {
+        return weatherLocalCacheUseCase.getForecast(city).flatMap {
+            Flowable.just(it)
         }
     }
 

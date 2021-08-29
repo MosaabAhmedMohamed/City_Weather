@@ -24,9 +24,6 @@ data class Weather(
     @ColumnInfo(name = "maxDegree")
     var maxDegree: Double?,
 
-    @ColumnInfo(name = "rain")
-    var rain: String?,
-
     @ColumnInfo(name = "weatherIc")
     var weatherIc: String? = null
 ){

@@ -50,14 +50,22 @@ class ForecastListFragment : BaseFragment() {
     }
 
     override fun init() {
+        initSwipeRefresh()
         observePreformSearch()
         initTutorialsRV()
         observeViewState()
     }
 
+    private fun initSwipeRefresh() {
+        binding.rootView.init()
+        binding.rootView.setOnRefreshListener {
+            searchViewModel.lastQuery?.let { tutorialsViewModel.getForecast(it) }
+        }
+    }
+
     private fun initTutorialsRV() {
-        binding.rvTutorials.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvTutorials.adapter = tutorialsAdapter
+        binding.rvForecast.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvForecast.adapter = tutorialsAdapter
     }
 
     private fun observeViewState() {
@@ -75,27 +83,39 @@ class ForecastListFragment : BaseFragment() {
 
     private fun handleViewState(viewState: WeatherViewState) {
         when (viewState) {
-            WeatherViewState.Loading -> { loadingState() }
+            WeatherViewState.Loading -> {
+                loadingState()
+            }
             is WeatherViewState.onError -> errorState(viewState.error)
-            is WeatherViewState.onSuccess -> successState(viewState.result)
-            WeatherViewState.emptyState -> { showEmptyState() }
-            WeatherViewState.isLoadFromCache -> { showResultsNotAccurate()}
+            is WeatherViewState.onSuccess -> successState(
+                viewState.result,
+                viewState.isLoadFromCache
+            )
+            WeatherViewState.emptyState -> {
+                showEmptyState()
+            }
         }
     }
 
     private fun showEmptyState() {
+        binding.rootView.stopRefresh()
         binding.progressRootView.rootView.gone()
         binding.errMessageRootView.rootView.visible()
+        binding.cvForecast.gone()
+        showHideResultsNotAccurate(false)
         binding.errMessageRootView.tvErrorMessage.text = getString(R.string.err_empty_result)
     }
 
-    private fun showResultsNotAccurate() {
-
+    private fun showHideResultsNotAccurate(isFromLocal: Boolean) {
+        binding.dataFromLocalErr.rootView.visible(isFromLocal)
     }
 
-    private fun successState(result: List<WeatherUiModel>) {
+    private fun successState(result: List<WeatherUiModel>, loadFromCache: Boolean) {
+        binding.rootView.stopRefresh()
+        showHideResultsNotAccurate(loadFromCache)
         binding.progressRootView.rootView.gone()
         binding.errMessageRootView.rootView.gone()
+        binding.cvForecast.visible()
         setTutorials(result)
     }
 
@@ -107,12 +127,18 @@ class ForecastListFragment : BaseFragment() {
         showRetryDialog(true) {
             searchViewModel.lastQuery?.let { tutorialsViewModel.getForecast(it) }
         }
+        binding.rootView.stopRefresh()
+        showHideResultsNotAccurate(false)
         binding.progressRootView.rootView.gone()
         binding.errMessageRootView.rootView.gone()
+        binding.cvForecast.gone()
     }
 
     private fun loadingState() {
+        binding.rootView.stopRefresh()
         tutorialsAdapter.clear()
+        showHideResultsNotAccurate(false)
+        binding.cvForecast.gone()
         binding.progressRootView.rootView.visible()
         binding.errMessageRootView.rootView.gone()
     }

@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:layout_marginStart="@dimen/dimen_16dp"
+    android:layout_marginTop="@dimen/dimen_8dp"
+    android:layout_marginEnd="@dimen/dimen_16dp"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/gray55"
+        android:drawablePadding="@dimen/dimen_4dp"
+        android:padding="@dimen/dimen_16dp"
+        android:text="@string/data_not_accurate"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_22sp"
+        android:textStyle="italic"
+        app:drawableStartCompat="@drawable/ic_warning" />
+
+</FrameLayout>

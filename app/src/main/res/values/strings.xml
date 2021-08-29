@@ -11,4 +11,5 @@
     <string name="search_field_placholder">Enter city name...</string>
     <string name="err_empty_result">city not found</string>
     <string name="todo">TODO</string>
+    <string name="data_not_accurate">The result you see may not be accurate</string>
 </resources>

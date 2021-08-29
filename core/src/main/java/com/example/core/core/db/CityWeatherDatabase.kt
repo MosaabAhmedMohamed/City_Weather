@@ -16,5 +16,5 @@ abstract class CityWeatherDatabase : RoomDatabase() {
     abstract fun tutorialsDao(): WeatherDao
 
 }
-const val CityWeather_DATABASE_VERSION_NUMBER = 8
+const val CityWeather_DATABASE_VERSION_NUMBER = 9
 

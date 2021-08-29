@@ -16,7 +16,6 @@ fun WeatherRemote.mapToLocalModel(): Weather {
         day = dt,
         minDegree = main.temp_min,
         maxDegree = main.temp_max,
-        rain = "",
         weatherIc = weather[0].icon
     )
 }

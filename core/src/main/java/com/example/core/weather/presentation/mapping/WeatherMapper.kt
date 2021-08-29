@@ -19,7 +19,6 @@ fun Weather.mapToUIModel(): WeatherUiModel {
         day?.let { getWeekday(it) },
         minDegree?.toInt().toString(),
         maxDegree?.toInt().toString(),
-        rain,
         OpenWeatherMapSotrageUrl.plus(weatherIc.plus(".png"))
     )
 }
